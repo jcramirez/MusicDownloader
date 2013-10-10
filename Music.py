@@ -52,8 +52,8 @@ class Get_file():
         self.convhtml = res.read()
         
     def download_file(self, html, name):
+        
         try:
-            
             soup = BS(html)
             links = soup.findAll('a')
             dllink = [link.get('href') for link in links][7]
@@ -246,9 +246,12 @@ class GUI(wx.Frame):
         self.text.SetLabel('Downloading...')
         self.filename = self.nametc.GetValue()
         file_name = self.new_path + self.filename
-        
-        worker2 = threading.Thread(target=lambda: self.getfile.download_file(self.getfile.convhtml, file_name  ))
-        worker2.start()
+        try:
+            worker2 = threading.Thread(target=lambda: self.getfile.download_file(self.getfile.convhtml, file_name  ))
+            worker2.start()
+        except:
+            self.Error("Error on conversion! Please retry")
+            self.reset()
         
         
     def OnTimer1(self, e):
